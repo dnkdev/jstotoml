@@ -2,7 +2,7 @@
   "name": "jstotoml",
   "module": "index.js",
   "type": "module",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "converts JavaScript object to TOML string",
   "repository": {
     "type": "git",

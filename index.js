@@ -90,7 +90,7 @@ export function totoml(jsobject, options = undefined){
             }
         }
         str.push(' ]')
-        return `${str.join('')}`;
+        return str.join('');
     }
 
     function parseObject(/** @type {any} */ object, /** @type {string} */ tablename, /** @type {string | undefined} */ table_prefix){
