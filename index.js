@@ -104,27 +104,3 @@ export function totoml(jsobject, options = undefined){
         return str.join('')
     }
 }
-const obj = {
-    title: "TOML Example",
-    owner: {
-      name: "Tom Preston-Werner",
-      dob: new Date('1979-05-27')
-    },
-    database: {
-      server: "192.168.1.1",
-      ports: [8001, 8002, 8003],
-      connection_max: 5000,
-      enabled: true
-    },
-    servers: {
-      alpha: {
-        ip: "10.0.0.1",
-        dc: "eqdc10"
-      },
-      beta: {
-        ip: "10.0.0.2",
-        dc: "eqdc10"
-      }
-    }
-  };
-console.log(totoml(obj))
