@@ -1,0 +1,13 @@
+{
+  "name": "jstotoml",
+  "module": "index.js",
+  "type": "module",
+  "version": "0.0.1",
+  "description": "converts JavaScript object to TOML string",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dnkdev/jstotoml.git"
+  },
+  "keywords": ["jstotoml", "js2toml"],
+  "license": "MIT"
+}
