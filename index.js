@@ -5,7 +5,7 @@
  * @param {any} options - no options to use now
  * @returns {string}
  */
-export function totoml(jsobject, options = undefined){
+export default function totoml(jsobject, options = undefined){
     if(jsobject instanceof Object && !Array.isArray(jsobject)){
         const stringBuffer = [];
         const globals = [];
@@ -41,7 +41,7 @@ export function totoml(jsobject, options = undefined){
             if (primitive.includes("'")){
                 q = '"';
             }
-            return `${key} = '${primitive}'`
+            return `${key} = ${q}${primitive}${q}`
         }
         else if (typeof primitive === 'number' || typeof primitive === 'boolean'){
             return `${key} = ${primitive}`;
