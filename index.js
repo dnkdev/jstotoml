@@ -35,16 +35,20 @@ export default function totoml(jsobject, options = undefined) {
         return parsePrimitive(jsobject);
     }
 
+    function parseString(/** @type {string} */ str){
+        let q = "'";
+        if (str.includes("'")) {
+            q = '"';
+        }
+        if (str.includes("\n")) {
+            q = '"""'
+        }
+        return `${q}${str}${q}`
+    }
+
     function parsePrimitive(/** @type {any} */ primitive, /** @type {string} */ key) {
         if (typeof primitive === 'string') {
-            let q = "'";
-            if (primitive.includes("'")) {
-                q = '"';
-            }
-            if (primitive.includes("\n")) {
-                q = '"""'
-            }
-            return `${key} = ${q}${primitive}${q}`
+            return `${key} = ${parseString(primitive)}`
         }
         else if (typeof primitive === 'number' || typeof primitive === 'boolean') {
             return `${key} = ${primitive}`;
@@ -82,11 +86,7 @@ export default function totoml(jsobject, options = undefined) {
                 str.push(`${parseArray(array[i])}`);
             }
             else if (typeof array[i] === 'string') {
-                let q = "'";
-                if (array[i].includes("'")) {
-                    q = '"';
-                }
-                str.push(`${q}${array[i]}${q}`);
+                str.push(`${parseString(array[i])}`);
             }
             else {
                 str.push(array[i].toString())
