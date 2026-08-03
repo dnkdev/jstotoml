@@ -2,44 +2,43 @@
 /**
  * Converts js object to toml string.
  * @param {any} jsobject 
- * @param {any} options - no options to use now
+ * @param {any} options - no options to use now (used for inner recursion for nested objects - table_prefix)
  * @returns {string}
  */
-export default function totoml(jsobject, options = undefined) {
+export default function toToml(jsobject, options = undefined) {
     if (jsobject instanceof Object && !Array.isArray(jsobject)) {
         const stringBuffer = [];
-        const globals = [];
         const tables = [];
         for (const key of Object.keys(jsobject)) {
-            if (typeof jsobject[key] === 'object' && !Array.isArray(jsobject[key]) && Object.prototype.toString.call(jsobject[key]) !== '[object Date]') {
+            const value = jsobject[key];
+            if (typeof value === 'object' && !Array.isArray(value) && Object.prototype.toString.call(value) !== '[object Date]') {
                 tables.push(key);
             }
             else {
-                globals.push(key);
+                stringBuffer.push(parsePrimitive(value, key), "\n");
             }
-        }
-        for (const key of globals) {
-            stringBuffer.push(`${parsePrimitive(jsobject[key], key)}\n`);
         }
         for (const key of tables) {
             let prefix = '';
             if (options && options.table_prefix) {
                 prefix = options.table_prefix
             }
-            stringBuffer.push(`${parseObject(jsobject[key], key, prefix)}`)
+            stringBuffer.push(parseObject(jsobject[key], key, prefix))
         }
 
         return stringBuffer.join('')
     }
     else {
-        return parsePrimitive(jsobject);
+        return '';
     }
 
     function parseString(/** @type {string} */ str){
         let q = "'";
+        // @ts-ignore
         if (str.includes("'")) {
             q = '"';
         }
+        // @ts-ignore
         if (str.includes("\n")) {
             q = '"""'
         }
@@ -47,6 +46,7 @@ export default function totoml(jsobject, options = undefined) {
     }
 
     function parsePrimitive(/** @type {any} */ primitive, /** @type {string} */ key) {
+        if (key != '')
         if (typeof primitive === 'string') {
             return `${key} = ${parseString(primitive)}`
         }
@@ -73,6 +73,7 @@ export default function totoml(jsobject, options = undefined) {
                 const object = array[i];
                 str.push('{');
                 const fields = Object.keys(object);
+                // @ts-ignore
                 for (const [index, key] of fields.entries()) {
                     let primitive = parsePrimitive(object[key], key)
                     if (index + 1 < fields.length) {
@@ -83,10 +84,10 @@ export default function totoml(jsobject, options = undefined) {
                 str.push('}');
             }
             else if (Array.isArray(array[i])) {
-                str.push(`${parseArray(array[i])}`);
+                str.push(parseArray(array[i]));
             }
             else if (typeof array[i] === 'string') {
-                str.push(`${parseString(array[i])}`);
+                str.push(parseString(array[i]));
             }
             else {
                 str.push(array[i].toString())
@@ -106,7 +107,7 @@ export default function totoml(jsobject, options = undefined) {
         }
         const str = [`\n[${prefix}${tablename}]\n`];
 
-        str.push(totoml(object, { table_prefix: tablename }))
+        str.push(toToml(object, { table_prefix: tablename }))
         return str.join('')
     }
 }

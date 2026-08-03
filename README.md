@@ -2,10 +2,8 @@
 
 # jstotoml
 
-Library has one function `totoml` that will convert JavaScript object to TOML string.
+Library has one function `toToml` that will convert JavaScript object to TOML string.
 <br>
-Library has limited options. Library goes without ANY dependencies.
-
-TODO:
-- [ ] Tests
-- [ ] Options how to generate TOML
+Library goes without ANY dependencies.
+<br><br>
+`npm i jstotoml`

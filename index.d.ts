@@ -1,3 +1,3 @@
 declare module "jstotoml" {
-    export default totoml(jsobject: any, options: any): string;
+    export default toToml(jsobject: any, options: any): string;
 }
