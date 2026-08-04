@@ -80,16 +80,22 @@ host = 'localhost'
 
 test('supports table prefix option', () => {
     const result = toToml({
-        database: {
-            host: 'localhost'
+        main: 'buzz',
+        config: {
+            data: 'foo',
+            database: {
+                host: 'localhost'
+            }
         }
-    }, {
-        table_prefix: 'config'
     });
 
     assert.equal(
         result,
-        `
+        `main = 'buzz'
+
+[config]
+data = 'foo'
+
 [config.database]
 host = 'localhost'
 `
@@ -149,16 +155,28 @@ world"""
     );
 });
 
-test('converts root primitive', () => {
+test('converts root primitive and array', () => {
     assert.equal(
         toToml('hello'),
         ''
     );
-});
-
-test('converts root array', () => {
     assert.equal(
         toToml([1,2,3]),
         ''
     );
 });
+
+test('parseString hardening', () => {
+    const result = toToml({
+        data: 'Name is """Daniel""".\nI \'\'\'like\'\'\' javascript \'frameworks\' as "Ignore", and girls!',
+        info: 'I\'m sure!'
+    });
+
+    assert.equal(result,
+        String.raw`data = """Name is \"\"\"Daniel\"\"\".
+I '''like''' javascript 'frameworks' as \"Ignore\", and girls!"""
+info = "I'm sure!"
+`
+    );
+}); 
+

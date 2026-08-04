@@ -39,8 +39,13 @@ export default function toToml(jsobject, options = undefined) {
             q = '"';
         }
         // @ts-ignore
-        if (str.includes("\n")) {
+        if (str.includes("\n") || str.includes("\r")) {
             q = '"""'
+        }
+        // @ts-ignore
+        if (q !== "'" && str.includes('"')){
+            // @ts-ignore
+            str = str.replace(/"/g, String.raw`\"`);
         }
         return `${q}${str}${q}`
     }
